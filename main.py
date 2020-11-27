@@ -71,4 +71,17 @@ def visualize_temp_data(temp_data: List[Temperature]) -> None:
 
 
 if __name__ == '__main__':
+    # Processed temperature data for each province
     alberta_temp = read_csv_temp('temperature/alberta.csv')
+    british_columbia_temp = read_csv_temp('temperature/british_columbia.csv')
+    manitoba_temp = read_csv_temp('temperature/manitoba.csv')
+    new_brunswick_temp = read_csv_temp('temperature/new_brunswick.csv')
+    newfoundland_temp = read_csv_temp('temperature/newfoundland.csv')
+    northwest_temp = read_csv_temp('temperature/northwest.csv')
+    nova_scotia_temp = read_csv_temp('temperature/nova_scotia.csv')
+    nunavut_temp = read_csv_temp('temperature/nunavut.csv')
+    ontario_temp = read_csv_temp('temperature/ontario.csv')
+    prince_edward_temp = read_csv_temp('temperature/prince_edward.csv')
+    quebec_temp = read_csv_temp('temperature/quebec.csv')
+    saskatchewan_temp = read_csv_temp('temperature/saskatchewan.csv')
+    yukon_temp = read_csv_temp('temperature/yukon.csv')
