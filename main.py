@@ -70,6 +70,67 @@ def visualize_temp_data(temp_data: List[Temperature]) -> None:
     fig.show()
 
 
+def read_csv_emission(filename: str) -> Dict[int, int]:
+    """Return the greenhouse gas emission data stored in the csv file with the given filename.
+
+    Preconditions:
+        - filename refers to a valid csv file in the 'other_data' folder
+    """
+    with open(filename) as file:
+        reader = csv.reader(file)
+        mapping_so_far = {}
+        for row in reader:
+            if row[0].isnumeric():
+                mapping_so_far[int(row[0])] = int(row[1])
+
+    return mapping_so_far
+
+
+def visualize_emission_data(data: Dict[int, int]) -> None:
+    """Visualize the emission data
+    Use a plotly *scatterplot* to visualize the data.
+    """
+    x_coords, y_coords = [], []
+    for element in data:
+        x_coords.append(element)
+        y_coords.append(data[element])
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x_coords, y=y_coords))
+    fig.update_layout(title='Emission Data', xaxis_title='Year', yaxis_title='Emission (Megatonnes of CO2 Equivalent)')
+    fig.show()
+
+
+def read_csv_deforestation(filename: str) -> Dict[int, int]:
+    """Return the deforestation data stored in the csv file with the given filename.
+
+    Preconditions:
+        - filename refers to a valid csv file in the 'other_data' folder
+    """
+    with open(filename) as file:
+        reader = csv.reader(file)
+        mapping_so_far = {}
+        for row in reader:
+            if row[0].isnumeric():
+                num = row[6].replace(',', '')
+                mapping_so_far[int(row[0])] = int(num)
+
+    return mapping_so_far
+
+
+def visualize_deforestation_data(data: Dict[int, int]) -> None:
+    """Visualize the deforestation data
+    Use a plotly *scatterplot* to visualize the data.
+    """
+    x_coords, y_coords = [], []
+    for element in data:
+        x_coords.append(element)
+        y_coords.append(data[element])
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x_coords, y=y_coords))
+    fig.update_layout(title='Deforestation Data', xaxis_title='Year', yaxis_title='Deforstation (Hectares)')
+    fig.show()
+
+
 if __name__ == '__main__':
     # Processed temperature data for each province
     alberta_temp = read_csv_temp('temperature/alberta.csv')
@@ -85,3 +146,9 @@ if __name__ == '__main__':
     quebec_temp = read_csv_temp('temperature/quebec.csv')
     saskatchewan_temp = read_csv_temp('temperature/saskatchewan.csv')
     yukon_temp = read_csv_temp('temperature/yukon.csv')
+
+    # Processed greenhouse gas emission data
+    emission_data = read_csv_emission('other_data/emission.csv')
+
+    # Processed deforestation data
+    deforestation_data = read_csv_deforestation('other_data/deforestation.csv')
