@@ -117,6 +117,24 @@ def read_csv_deforestation(filename: str) -> Dict[int, int]:
     return mapping_so_far
 
 
+def read_csv_deforestation_hydro(filename: str) -> Dict[int, int]:
+    """Return the deforestation data CAUSED BY HYDROELECTRIC
+    stored in the csv file with the given filename.
+
+    Preconditions:
+        - filename refers to a valid csv file in the 'other_data' folder
+    """
+    with open(filename) as file:
+        reader = csv.reader(file)
+        mapping_so_far = {}
+        for row in reader:
+            if row[0].isnumeric():
+                num = row[5].replace(',', '')
+                mapping_so_far[int(row[0])] = int(num)
+
+    return mapping_so_far
+
+
 def visualize_deforestation_data(data: Dict[int, int]) -> None:
     """Visualize the deforestation data
     Use a plotly *scatterplot* to visualize the data.
@@ -152,3 +170,6 @@ if __name__ == '__main__':
 
     # Processed deforestation data
     deforestation_data = read_csv_deforestation('other_data/deforestation.csv')
+    deforestation_hydro = read_csv_deforestation_hydro('other_data/deforestation.csv')
+    deforestation_rest = {k: deforestation_data[k] - deforestation_hydro[k]
+                          for k in deforestation_data}
