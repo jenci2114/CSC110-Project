@@ -18,6 +18,22 @@ def visualize_temp_data(temp_data: List[Temperature]) -> None:
     fig.show()
 
 
+def visualize_temp_trend(data: Dict[int, float]) -> None:
+    """Visualize the trend of temperature data
+    Use a plotly *scatterplot* to visualize the data.
+    """
+    coords = []
+    for element in data:
+        coords.append((element, data[element]))
+    coords.sort()
+    x_coords = [coord[0] for coord in coords]
+    y_coords = [coord[1] for coord in coords]
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x_coords, y=y_coords))
+    fig.update_layout(title='Temperature Data', xaxis_title='Year', yaxis_title='Temperature')
+    fig.show()
+
+
 def visualize_emission_data(data: Dict[int, int]) -> None:
     """Visualize the emission data
     Use a plotly *scatterplot* to visualize the data.
