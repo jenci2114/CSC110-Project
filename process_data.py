@@ -164,28 +164,28 @@ def model_deforestation(data: Dict[int, int]) -> Tuple[float, float, float]:
 
 
 def model_correlation(data: Tuple[List[float], List[int], List[int]]) -> \
-        Tuple[float, float, float]:
-    """Return the a-, b-, and c-value of y = a(x1) + b(x2) + c, the prediction of
+        Tuple[float, float, float, float, float]:
+    """Return the a-, b-, c-, d-, and e-value of y = a(x1 - b) + c(x2 - d) + e, the prediction of
     temperature based on the given values of emission and deforestation.
 
     y denotes the temperature, x1 denotes the emission, and x2 denotes the deforestation,
     with their respective units
 
-    Returns the tuple (a, b, c)
+    Returns the tuple (a, b, c, d, e)
 
     Preconditions:
         - Input must be in the format of (list of temperature values, list of
         emission values, list of deforestation values).
     """
-    x = numpy.array([data[1], data[2]])
-    y = numpy.array(data[0])
+    x = numpy.array([data[1], data[2]])  # Emission, deforestation
+    y = numpy.array(data[0])  # Temperature
 
-    def func(x, a, b, c) -> Any:
-        return a * x[0] + b * x[1] + c
+    def func(x, a, b, c, d, e) -> Any:
+        return a * (x[0] - b) + c * (x[1] - d) + e
 
-    a, b, c = curve_fit(func, xdata=x, ydata=y)[0]
+    a, b, c, d, e = curve_fit(func, xdata=x, ydata=y)[0]
 
-    return (a, b, c)
+    return (a, b, c, d, e)
 
 
 # Processed temperature data for each province
@@ -244,3 +244,4 @@ FINAL_DATA = (
     [EMISSION_DATA[k] for k in EMISSION_DATA if k in range(1991, 2018)],
     [DEFORESTATION_DATA[k] for k in DEFORESTATION_DATA if k in range(1991, 2018)]
 )
+FINAL_CORRELATION = model_correlation(FINAL_DATA)
