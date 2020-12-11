@@ -42,7 +42,7 @@ def read_csv_temp(filename: str) -> List[Temperature]:
         data = [process_row_temp(row) for row in reader]
 
     # Change this line if we want another month(s)
-    return [item for item in data if item.temp != -9999.9 and item.month in {7}]
+    return [item for item in data if item.temp != -9999.9 and item.month in {8, 9}]
 
 
 def process_row_temp(row: List[str]) -> Temperature:
