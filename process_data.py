@@ -42,7 +42,7 @@ def read_csv_temp(filename: str) -> List[Temperature]:
         data = [process_row_temp(row) for row in reader]
 
     # Change this line if we want another month(s)
-    return [item for item in data if item.temp != -9999.9 and item.month == 7]
+    return [item for item in data if item.temp != -9999.9 and item.month in {7}]
 
 
 def process_row_temp(row: List[str]) -> Temperature:
@@ -68,7 +68,6 @@ def get_yearly_median_temp(data: List[Temperature]) -> Dict[int, float]:
     """Returns a list of temperature containing the median for each year."""
 
     temp_mapping = {t.year: [] for t in data}
-    province = data[0].prov
 
     for t in data:
         temp_mapping[t.year].append(t.temp)
@@ -96,7 +95,7 @@ def read_csv_emission(filename: str) -> Dict[int, int]:
 
 
 def model_emission(data: Dict[int, int]) -> Tuple[float, float, float]:
-    """Return the a- and b- value of y = a(ln(x - b)) + c, the best-fit curve
+    """Return the a-, b-, and c-value of y = a(ln(x - b)) + c, the best-fit curve
     of emission data.
 
     Return (a, b, c)
@@ -148,7 +147,7 @@ def read_csv_deforestation_hydro(filename: str) -> Dict[int, int]:
 
 
 def model_deforestation(data: Dict[int, int]) -> Tuple[float, float, float]:
-    """Return the a- and b- value of y = a/(x-b) + c, the best-fit curve
+    """Return the a-, b-, and c-value of y = a/(x-b) + c, the best-fit curve
     of emission data.
 
     Return (a, b, c)
@@ -162,6 +161,31 @@ def model_deforestation(data: Dict[int, int]) -> Tuple[float, float, float]:
     a, b, c = curve_fit(func, xdata=x, ydata=y)[0]
 
     return (a, b, c)
+
+
+def model_correlation(data: Tuple[List[float], List[int], List[int]]) -> \
+        Tuple[float, float, float, float, float]:
+    """Return the a-, b-, c-, d-, and e-value of y = a(x1 - b) + c(x2 - d) + e, the prediction of
+    temperature based on the given values of emission and deforestation.
+
+    y denotes the temperature, x1 denotes the emission, and x2 denotes the deforestation,
+    with their respective units
+
+    Returns the tuple (a, b, c, d, e)
+
+    Preconditions:
+        - Input must be in the format of (list of temperature values, list of
+        emission values, list of deforestation values).
+    """
+    x = numpy.array([data[1], data[2]])  # Emission, deforestation
+    y = numpy.array(data[0])  # Temperature
+
+    def func(x, a, b, c, d, e) -> Any:
+        return numpy.abs(a) * (x[0] - b) + numpy.abs(c) * (x[1] - d) + e
+
+    a, b, c, d, e = curve_fit(func, xdata=x, ydata=y)[0]
+
+    return (a, b, c, d, e)
 
 
 # Processed temperature data for each province
@@ -193,6 +217,16 @@ QUEBEC_MEDIAN = get_yearly_median_temp(QUEBEC_TEMP)
 SASKATCHEWAN_MEDIAN = get_yearly_median_temp(SASKATCHEWAN_TEMP)
 YUKON_MEDIAN = get_yearly_median_temp(YUKON_TEMP)
 
+CANADA_MEDIAN = {}
+for i in range(1991, 2020):
+    CANADA_MEDIAN[i] = (ALBERTA_MEDIAN[i] + BRITISH_COLUMBIA_MEDIAN[i] +
+                        MANITOBA_MEDIAN[i] + NEW_BRUNSWICK_MEDIAN[i] +
+                        NEWFOUNDLAND_MEDIAN[i] + NORTHWEST_MEDIAN[i] +
+                        NOVA_SCOTIA_MEDIAN[i] + NUNAVUT_MEDIAN[i] +
+                        ONTARIO_MEDIAN[i] + PRINCE_EDWARD_MEDIAN[i] +
+                        QUEBEC_MEDIAN[i] + SASKATCHEWAN_MEDIAN[i] +
+                        YUKON_MEDIAN[i]) / 13
+
 # Processed greenhouse gas emission data
 EMISSION_DATA = read_csv_emission('other_data/emission.csv')
 EMISSION_CURVE = model_emission(EMISSION_DATA)
@@ -203,3 +237,13 @@ DEFORESTATION_HYDRO = read_csv_deforestation_hydro('other_data/deforestation.csv
 DEFORESTATION_REST = {k: DEFORESTATION_DATA[k] - DEFORESTATION_HYDRO[k]
                       for k in DEFORESTATION_DATA}
 DEFORESTATION_REST_CURVE = model_deforestation(DEFORESTATION_REST)
+
+# Processed correlation data
+TEMP_CHANGE = {k: CANADA_MEDIAN[k + 1] - CANADA_MEDIAN[k] for k in CANADA_MEDIAN
+               if k in range(1991, 2018)}
+FINAL_DATA = (
+    [TEMP_CHANGE[k] for k in TEMP_CHANGE if k in range(1991, 2018)],
+    [EMISSION_DATA[k] for k in EMISSION_DATA if k in range(1991, 2018)],
+    [DEFORESTATION_DATA[k] for k in DEFORESTATION_DATA if k in range(1991, 2018)]
+)
+FINAL_CORRELATION = model_correlation(FINAL_DATA)
