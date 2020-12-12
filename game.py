@@ -101,19 +101,24 @@ class TemperatureGame:
         # Create font and text
         x_align = 80
         font = pygame.font.SysFont('Comic Sans MS', 32)
+        font_1 = pygame.font.SysFont('Comic Sans MS', 48)
+        title_text = font_1.render('Temperature prediction', True, black)
+        title_rect = title_text.get_rect(topleft=(x_align, 50))
+
         year_text = font.render(f'Year: {new_year}', True, black)
-        year_rect = year_text.get_rect(topleft=(x_align, 90))
+        year_rect = year_text.get_rect(topleft=(x_align, 200))
         emission_text = font.render(f'Emission: {new_emission} Megatonnes of CO2 Equivalent',
                                     True, black)
-        emission_rect = emission_text.get_rect(topleft=(x_align, 180))
+        emission_rect = emission_text.get_rect(topleft=(x_align, 280))
         deforestation_text = font.render(f'Deforestation: {new_deforestation} Hectares',
                                          True, black)
-        deforestation_rect = deforestation_text.get_rect(topleft=(x_align, 270))
+        deforestation_rect = deforestation_text.get_rect(topleft=(x_align, 370))
         temperature_text = font.render(f'Temperature: {new_temperature} Degrees Celsius',
                                        True, black)
-        temperature_rect = temperature_text.get_rect(topleft=(x_align, 360))
+        temperature_rect = temperature_text.get_rect(topleft=(x_align, 460))
 
         # Display text
+        screen.blit(title_text, title_rect)
         screen.blit(year_text, year_rect)
         screen.blit(emission_text, emission_rect)
         screen.blit(deforestation_text, deforestation_rect)
@@ -137,7 +142,7 @@ class TemperatureGame:
         font = pygame.font.SysFont('Comic Sans MS', 24)
         instruction_text = font.render('Press the SPACEBAR to predict the environmental data '
                                        'for the following year.', True, black)
-        instruction_rect = instruction_text.get_rect(topleft=(80, 540))
+        instruction_rect = instruction_text.get_rect(topleft=(80, 580))
         screen.blit(instruction_text, instruction_rect)
 
         # Initialize current values
@@ -187,7 +192,7 @@ class TemperatureGame:
                     if hydro:
                         hydro_text = font.render('During the hydroelectric reservoir development this year, '
                                                  'large forest areas are flooded.', True, black)
-                        hydro_rect = hydro_text.get_rect(topleft=(80, 450))
+                        hydro_rect = hydro_text.get_rect(topleft=(80, 420))
                         screen.blit(hydro_text, hydro_rect)
                     pygame.display.flip()
 
