@@ -13,14 +13,14 @@ Copyright Information
 
 This file is Copyright (c) 2020 Caules Ge, Jenci Wei, Zheng Luan
 """
-from process_data import *
-
 import math
-import pygame
 import random
 
+import pygame
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+
+from process_data import *
 
 
 class TemperatureGame:
@@ -199,7 +199,7 @@ class TemperatureGame:
 
     def print_graph(self) -> None:
         """Print a statistical graph for the game."""
-        years = [k for k in self.temperature]
+        years = list(self.temperature.keys())
 
         # Initialize figure with subplots
         fig = make_subplots(rows=3, cols=1, subplot_titles=(
@@ -236,5 +236,9 @@ if __name__ == '__main__':
     python_ta.contracts.DEBUG_CONTRACTS = False
     python_ta.contracts.check_all_contracts()
 
-    game = TemperatureGame(EMISSION_CURVE, DEFORESTATION_REST_CURVE, FINAL_CORRELATION, 14)
-    game.run()
+    python_ta.check_all(config={
+        'extra-imports': [],  # the names (strs) of imported modules
+        'allowed-io': [],  # the names (strs) of functions that call print/open/input
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })

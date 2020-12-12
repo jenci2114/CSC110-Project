@@ -5,15 +5,15 @@ Description
 
 This Python module contains functions needed to visualize
 data that are already processed by the module 'process_data.py'
-using Plotly.
+using Plotly. This Python module will not be used by the simulation
+game, however, it provides insightful references for developing it.
 
 Copyright Information
 ===============================
 
 This file is Copyright (c) 2020 Caules Ge, Jenci Wei, Zheng Luan
 """
-import plotly.graph_objects as go
-from process_data import *
+from main import *
 
 
 def visualize_temp_data(temp_data: List[Temperature]) -> None:
