@@ -135,7 +135,7 @@ class TemperatureGame:
         # Create a screen
         size = (1280, 720)
         screen = pygame.display.set_mode(size)
-        background = pygame.image.load('images/background.jpg')
+        background = pygame.image.load('images/back_one.jpg')
         screen.blit(background, (0, 0))
 
         # Create font and instruction text
@@ -147,9 +147,9 @@ class TemperatureGame:
 
         # Initialize current values
         current_year = 2020
-        current_emission = self.emission[2020]
-        current_deforestation = self.deforestation[2020]
-        current_temperature = self.temperature[2020]
+        current_emission = round(self.emission[2020], 6)
+        current_deforestation = round(self.deforestation[2020], 6)
+        current_temperature = round(self.temperature[2020], 3)
         self.predict_display(screen, current_year, current_emission,
                              current_deforestation, current_temperature)
         pygame.display.flip()
@@ -193,22 +193,22 @@ class TemperatureGame:
                     self.temperature[current_year] = current_temperature
 
                     # Display the values
-                    background = pygame.image.load('images/background.jpg')
+                    background = pygame.image.load('images/back_one.jpg')
                     screen.blit(background, (0, 0))
                     screen.blit(instruction_text, instruction_rect)
-                    self.predict_display(screen, current_year, current_emission,
-                                         current_deforestation, current_temperature)
+                    self.predict_display(screen, current_year, round(current_emission, 6),
+                                         round(current_deforestation, 6), round(current_temperature, 3))
                     # To tell the users our limitation of prediction.
                     if current_year == 2060:
                         hydro_text = font.render('Will Beyond the ability to predict! '
                                                  'Please close the window and check the words '
-                                                 'in Python console', True, (0, 0, 255))
+                                                 'in Python console', True, (255, 5, 5))
                         hydro_rect = hydro_text.get_rect(topleft=(80, 420))
                         screen.blit(hydro_text, hydro_rect)
                     # Like the comment above, to show the effect of hydroelectric.
                     if any(current_year == i for i in hydroelectric_years):
                         hydro_text = font.render('During the hydroelectric reservoir development this year, '
-                                                 'large forest areas are flooded.', True, (128, 0, 128))
+                                                 'large forest areas are flooded.', True, (158, 0, 158))
                         hydro_rect = hydro_text.get_rect(topleft=(80, 420))
                         screen.blit(hydro_text, hydro_rect)
                     # The curve will expand if the user still press SPACEBAR.
