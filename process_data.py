@@ -46,7 +46,7 @@ class Temperature:
 def read_csv_temp(filename: str) -> List[Temperature]:
     """Return the temperature data stored in the csv file with the given filename."""
 
-    with open(filename, encoding='gbk', errors='ignore') as file:
+    with open(filename, encoding='utf-8') as file:
         reader = csv.reader(file)
         next(reader)  # skips the headers line
         data = [process_row_temp(row) for row in reader]
@@ -88,7 +88,7 @@ def get_yearly_median_temp(data: List[Temperature]) -> Dict[int, float]:
 def read_csv_emission(filename: str) -> Dict[int, int]:
     """Return the greenhouse gas emission data stored in the csv file with the given filename."""
 
-    with open(filename, encoding='gbk', errors='ignore') as file:
+    with open(filename, encoding='utf-8') as file:
         reader = csv.reader(file)
         mapping_so_far = {}
         for row in reader:
@@ -111,14 +111,13 @@ def model_emission(data: Dict[int, int]) -> Tuple[float, float, float]:
         return a * numpy.log(x - b) + c
 
     a, b, c = curve_fit(func, xdata=x, ydata=y)[0]
-
     return (a, b, c)
 
 
 def read_csv_deforestation(filename: str) -> Dict[int, int]:
     """Return the deforestation data stored in the csv file with the given filename."""
 
-    with open(filename, encoding='gbk', errors='ignore') as file:
+    with open(filename, encoding='utf-8') as file:
         reader = csv.reader(file)
         mapping_so_far = {}
         for row in reader:
@@ -133,7 +132,7 @@ def read_csv_deforestation_hydro(filename: str) -> Dict[int, int]:
     """Return the deforestation data CAUSED BY HYDROELECTRIC
     stored in the csv file with the given filename.
     """
-    with open(filename, encoding='gbk', errors='ignore') as file:
+    with open(filename, encoding='utf-8') as file:
         reader = csv.reader(file)
         mapping_so_far = {}
         for row in reader:
