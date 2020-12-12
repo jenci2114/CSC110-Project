@@ -76,12 +76,12 @@ class TemperatureGame:
     def predict_emission(self, year: int) -> float:
         """Predict the emission value of the following year."""
         a, b, c = self.emission_predict
-        return a * math.log(year - b) + c
+        return a * math.log(year - b) + c + random.uniform(-30, 30)
 
     def predict_deforestation(self, year: int) -> float:
         """Predict the deforestation value of the following year."""
         a, b, c = self.deforestation_predict
-        return a / (year - b) + c
+        return a / (year - b) + c + random.uniform(-3000, 3000)
 
     def predict_temperature(self, emission: float, deforestation: float,
                             temp_current_year: float) -> float:

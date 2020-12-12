@@ -111,6 +111,7 @@ def model_emission(data: Dict[int, int]) -> Tuple[float, float, float]:
         return a * numpy.log(x - b) + c
 
     a, b, c = curve_fit(func, xdata=x, ydata=y)[0]
+
     return (a, b, c)
 
 
