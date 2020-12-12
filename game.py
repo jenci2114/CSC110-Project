@@ -1,4 +1,17 @@
-"""CSC110 Project - Fall 2020
+"""CSC110 Fall 2020 Project
+
+Description
+===============================
+
+This Python module contains functions needed to create a Pygame interface
+that predicts emission, deforestation, and temperature data using
+data stored in 'process_data.py'. This Python module also uses Plotly
+to generate statistical graphs after one finishes playing the game.
+
+Copyright Information
+===============================
+
+This file is Copyright (c) 2020 Caules Ge, Jenci Wei, Zheng Luan
 """
 from process_data import *
 
@@ -23,14 +36,14 @@ class TemperatureGame:
         - correlation: correlation between temperature and (emission and deforestation)
 
     Representation Invariants:
-        - all(k >= 2020 for k in emission)
-        - all(emission[k] >= 0 for k in emission)
-        - all(k >= 2020 for k in deforestation)
-        - all(deforestation[k] >= 0 for k in deforestation)
-        - all(k >= 2020 for k in temperature)
+        - all(k >= 2020 for k in self.emission)
+        - all(self.emission[k] >= 0 for k in self.emission)
+        - all(k >= 2020 for k in self.deforestation)
+        - all(self.deforestation[k] >= 0 for k in self.deforestation)
+        - all(k >= 2020 for k in self.temperature)
 
     Sample usage:
-    >>> game = TemperatureGame(EMISSION_CURVE, DEFORESTATION_REST_CURVE, FINAL_CORRELATION, 17.5)
+    >>> game = TemperatureGame(EMISSION_CURVE, DEFORESTATION_REST_CURVE, FINAL_CORRELATION, 14)
     >>> game.run()
     """
     emission: Dict[int, float]
@@ -45,6 +58,14 @@ class TemperatureGame:
                  correlation: Tuple[float, float, float, float, float],
                  start_temp: float) -> None:
         """Initializes the game."""
+
+        # Avoid python_ta from yelling at me for not initializing those
+        # three classes before calling a method
+        self.emission = {}
+        self.deforestation = {}
+        self.temperature = {}
+
+        # Actually initialize the game
         self.emission_predict = emission_predict
         self.deforestation_predict = deforestation_predict
         self.correlation = correlation
@@ -204,5 +225,10 @@ class TemperatureGame:
         fig.show()
 
 
-game = TemperatureGame(EMISSION_CURVE, DEFORESTATION_REST_CURVE, FINAL_CORRELATION, 14)
-game.run()
+if __name__ == '__main__':
+    import python_ta.contracts
+    python_ta.contracts.DEBUG_CONTRACTS = False
+    python_ta.contracts.check_all_contracts()
+
+    game = TemperatureGame(EMISSION_CURVE, DEFORESTATION_REST_CURVE, FINAL_CORRELATION, 14)
+    game.run()
