@@ -1,4 +1,16 @@
-"""CSC110 Project - Fall 2020
+"""CSC110 Fall 2020 Project
+
+Description
+===============================
+
+This Python module contains functions needed to visualize
+data that are already processed by the module 'process_data.py'
+using Plotly.
+
+Copyright Information
+===============================
+
+This file is Copyright (c) 2020 Caules Ge, Jenci Wei, Zheng Luan
 """
 import plotly.graph_objects as go
 from process_data import *
@@ -70,3 +82,9 @@ def visualize_deforestation_data(data: Dict[int, int]) -> None:
 
     fig.update_layout(title='Deforestation Data', xaxis_title='Year', yaxis_title='Deforstation (Hectares)')
     fig.show()
+
+
+if __name__ == '__main__':
+    import python_ta.contracts
+    python_ta.contracts.DEBUG_CONTRACTS = False
+    python_ta.contracts.check_all_contracts()

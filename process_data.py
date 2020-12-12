@@ -1,4 +1,17 @@
-"""CSC110 Project - Fall 2020
+"""CSC110 Fall 2020 Project
+
+Description
+===============================
+
+This Python module contains functions needed to process the raw data
+retrieved from various datasets. Additionally, processed data are
+stored at the bottom of this module in the form that can be accessed by
+other modules.
+
+Copyright Information
+===============================
+
+This file is Copyright (c) 2020 Caules Ge, Jenci Wei, Zheng Luan
 """
 import csv
 import numpy
@@ -6,7 +19,7 @@ import statistics
 
 from dataclasses import dataclass
 from scipy.optimize import curve_fit
-from typing import *
+from typing import List, Dict, Tuple, Any
 
 
 @dataclass
@@ -31,26 +44,20 @@ class Temperature:
 
 
 def read_csv_temp(filename: str) -> List[Temperature]:
-    """Return the temperature data stored in the csv file with the given filename.
+    """Return the temperature data stored in the csv file with the given filename."""
 
-    Preconditions:
-        - filename refers to a valid csv file in the 'temperature' folder
-    """
     with open(filename) as file:
         reader = csv.reader(file)
         next(reader)  # skips the headers line
         data = [process_row_temp(row) for row in reader]
 
     # Change this line if we want another month(s)
-    return [item for item in data if item.temp != -9999.9 and item.month in {7}]
+    return [item for item in data if item.temp != -9999.9 and item.month in {8, 9}]
 
 
 def process_row_temp(row: List[str]) -> Temperature:
-    """Convert a row of temperature data to Temperature object
+    """Convert a row of temperature data to Temperature object"""
 
-    Preconditions:
-        - row has the correct format for the temperature data set
-    """
     if row[10] == '':
         row[10] = '-9999.9'
 
@@ -79,11 +86,8 @@ def get_yearly_median_temp(data: List[Temperature]) -> Dict[int, float]:
 
 
 def read_csv_emission(filename: str) -> Dict[int, int]:
-    """Return the greenhouse gas emission data stored in the csv file with the given filename.
+    """Return the greenhouse gas emission data stored in the csv file with the given filename."""
 
-    Preconditions:
-        - filename refers to a valid csv file in the 'other_data' folder
-    """
     with open(filename) as file:
         reader = csv.reader(file)
         mapping_so_far = {}
@@ -112,11 +116,8 @@ def model_emission(data: Dict[int, int]) -> Tuple[float, float, float]:
 
 
 def read_csv_deforestation(filename: str) -> Dict[int, int]:
-    """Return the deforestation data stored in the csv file with the given filename.
+    """Return the deforestation data stored in the csv file with the given filename."""
 
-    Preconditions:
-        - filename refers to a valid csv file in the 'other_data' folder
-    """
     with open(filename) as file:
         reader = csv.reader(file)
         mapping_so_far = {}
@@ -131,9 +132,6 @@ def read_csv_deforestation(filename: str) -> Dict[int, int]:
 def read_csv_deforestation_hydro(filename: str) -> Dict[int, int]:
     """Return the deforestation data CAUSED BY HYDROELECTRIC
     stored in the csv file with the given filename.
-
-    Preconditions:
-        - filename refers to a valid csv file in the 'other_data' folder
     """
     with open(filename) as file:
         reader = csv.reader(file)
@@ -171,11 +169,10 @@ def model_correlation(data: Tuple[List[float], List[int], List[int]]) -> \
     y denotes the temperature, x1 denotes the emission, and x2 denotes the deforestation,
     with their respective units
 
-    Returns the tuple (a, b, c, d, e)
+    Input is in the format of (list of temperature values, list of
+    emission values, list of deforestation values).
 
-    Preconditions:
-        - Input must be in the format of (list of temperature values, list of
-        emission values, list of deforestation values).
+    Returns the tuple (a, b, c, d, e)
     """
     x = numpy.array([data[1], data[2]])  # Emission, deforestation
     y = numpy.array(data[0])  # Temperature
@@ -247,3 +244,8 @@ FINAL_DATA = (
     [DEFORESTATION_DATA[k] for k in DEFORESTATION_DATA if k in range(1991, 2018)]
 )
 FINAL_CORRELATION = model_correlation(FINAL_DATA)
+
+if __name__ == '__main__':
+    import python_ta.contracts
+    python_ta.contracts.DEBUG_CONTRACTS = False
+    python_ta.contracts.check_all_contracts()
