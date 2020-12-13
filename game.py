@@ -27,7 +27,6 @@ class TemperatureGame:
     """A simulation of Canada's temperature.
 
     Instance Attributes:
-        - year: current year
         - emission: mapping of year to emission (Megatonnes of CO2 equivalent)
         - deforestation: mapping of year to deforestation (Hectares)
         - temperature: mapping of year to temperature (Degrees Celcius)
